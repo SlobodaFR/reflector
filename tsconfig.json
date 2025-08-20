@@ -1,0 +1,13 @@
+{
+  // Visit https://aka.ms/tsconfig to read more about this file
+  "compilerOptions": {
+  "experimentalDecorators": true,
+  "emitDecoratorMetadata": true,
+  "target": "ES2022",
+  "useDefineForClassFields": false,
+  "outDir": "./dist",
+  "types": ["node"],
+  "moduleResolution": "nodenext",
+  "module": "NodeNext"
+  }
+}
