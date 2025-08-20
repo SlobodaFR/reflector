@@ -1,6 +1,5 @@
-import { Entity, EntityProperty } from "../utils/entity-decorators";
-import { Operation } from "./operation";
-import { OperationStep } from "./operation-step";
+import { Entity, EntityProperty } from "../../src";
+import { Operation, OperationStep } from "./";
 
 @Entity(OperationStep)
 export class CreateOperationStepRequestDTO {
@@ -22,4 +21,5 @@ export class CreateOperationRequestDTO {
     @EntityProperty('steps', {mapClass: CreateOperationStepRequestDTO})
     public steps!: CreateOperationStepRequestDTO[];
 }
+
 

@@ -1,20 +1,42 @@
 {
-  "name": "reflector",
+  "name": "@thomassloboda/reflector",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "author": {
+    "name": "Thomas Sloboda",
+    "email": "thomas@sloboda.fr",
+    "url": "https://thomas.sloboda.fr"
+  },
   "scripts": {
     "start": "npx tsx src/index.ts",
-    "build": "tsc"
+    "build": "rm -rf dist && tsc --declaration --emitDeclarationOnly false",
+    "test": "jest"
   },
   "keywords": [],
-  "author": "",
   "license": "ISC",
+  "files": [
+    "dist",
+    "README.md",
+    "TUTORIAL.md",
+    "package.json"
+  ],
   "description": "",
   "dependencies": {
     "reflect-metadata": "^0.2.2"
   },
   "devDependencies": {
+    "@types/jest": "^30.0.0",
     "@types/node": "^24.3.0",
+    "jest": "^30.0.5",
+    "ts-jest": "^29.4.1",
     "typescript": "^5.9.2",
     "undici-types": "^7.14.0"
   }

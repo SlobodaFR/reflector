@@ -1,4 +1,4 @@
-import { Identifier } from "../shared/identifier";
+import { Identifier } from "./";
 
 export class OperationStep {
     private _stepIdentifier!: Identifier;

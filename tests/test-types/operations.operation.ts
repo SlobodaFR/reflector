@@ -1,6 +1,4 @@
-import { Identifier } from "../shared/identifier";
-import { Version } from "../shared/version";
-import { OperationStep } from "./operation-step";
+import { Identifier, Version, OperationStep } from "./";
 
 export class Operation {
     private _operationIdentifier!: Identifier;
@@ -28,4 +26,4 @@ export class Operation {
     public get steps(): OperationStep[] {
         return this._steps;
     }
-    }
+}

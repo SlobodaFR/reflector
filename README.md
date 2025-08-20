@@ -1,115 +1,105 @@
 # Reflector
 
-> **Reflector** is a TypeScript library for seamless mapping between DTOs, entities, and other data models (e.g., Mongoose, Prisma schemas) using decorators and dynamic reflection.
+> TypeScript decorators for seamless DTO ↔ Entity mapping
+
+Reflector is a lightweight TypeScript library that lets you map between DTOs and Entities using decorators and runtime metadata. It’s designed for clean, maintainable code in Node.js and TypeScript projects.
 
 ---
 
-## Overview
-
-Reflector provides a flexible and extensible way to map objects between layers (DTOs, entities, schemas) in your application. It leverages TypeScript decorators and metadata to automate bidirectional mapping, including support for nested/child objects.
-
-- **Declarative mapping**: Use `@EntityProperty` and `@Entity` decorators to describe how your DTOs and entities relate.
-- **Recursive mapping**: Child objects and arrays are mapped automatically using the `mapClass` option.
-- **Extensible**: Works with DTOs, entities, and can be extended to other models (Mongoose, Prisma, etc).
-
 ## Features
+- 🚀 Decorator-based mapping for DTOs and Entities
+- 🔄 Automatic, recursive property mapping (including arrays)
+- 🛡️ Only public properties are mapped
+- 🧩 Extensible for custom mapping logic
+- 📦 Zero runtime dependencies (except `reflect-metadata`)
 
-- Decorator-based property mapping
-- Automatic deep mapping for nested objects/arrays
-- Bidirectional conversion (`mapToEntity`, `mapFromEntity`)
-- TypeScript-first, zero runtime config
-- Easily extensible for other model types
+---
 
-## Getting Started
+## Installation
 
-```bash
-npm install reflect-metadata
+```sh
+npm install @thomassloboda/reflector reflect-metadata
 ```
 
-Add the following to your `tsconfig.json`:
+> [!IMPORTANT]
+> You must enable `experimentalDecorators` and `emitDecoratorMetadata` in your `tsconfig.json`.
+
 ```jsonc
 {
   "compilerOptions": {
     "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
-    "types": ["node"],
-    "moduleResolution": "nodenext",
-    "module": "NodeNext"
+    "emitDecoratorMetadata": true
   }
 }
 ```
 
-## Usage Example
+---
+
+## Quick Start
 
 ```typescript
-import { Entity, EntityProperty } from "./utils/entity-decorators";
+import 'reflect-metadata';
+import { Entity, EntityProperty } from '@thomassloboda/reflector';
 
-@Entity(User)
+@Entity(UserEntity)
 class UserDTO {
   @EntityProperty('id')
   public id!: string;
 
-  @EntityProperty('profile', { mapClass: ProfileDTO })
-  public profile!: ProfileDTO;
+  @EntityProperty('name')
+  public name!: string;
 }
 
-@Entity(Profile)
-class ProfileDTO {
-  @EntityProperty('bio')
-  public bio!: string;
-}
+const dto = new UserDTO();
+dto.id = 'u123';
+dto.name = 'Alice';
 
-const userDto = new UserDTO();
-userDto.id = '123';
-userDto.profile = new ProfileDTO();
-userDto.profile.bio = 'Hello!';
-
-// Map DTO to entity
-const userEntity = userDto.mapToEntity();
-
-// Map entity to DTO
-const newUserDto = new UserDTO();
-newUserDto.mapFromEntity(userEntity);
+const entity = (dto as any).mapToEntity();
+// entity: { id: 'u123', name: 'Alice' }
 ```
-
-## Project Structure
-
-```
-reflector/
-├── src/
-│   ├── utils/entity-decorators.ts
-│   ├── operations/
-│   │   ├── create-operation.dto.ts
-│   │   ├── created-operation.dto.ts
-│   │   ├── operation-step.ts
-│   │   ├── operation.ts
-│   ├── vehicles/
-│   │   ├── create-vehicle.dto.ts
-│   │   ├── vehicle.entity.ts
-│   ├── shared/
-│   │   ├── identifier.ts
-│   │   ├── version.ts
-│   ├── index.ts
-├── package.json
-├── tsconfig.json
-```
-
-## Admonition
-
-> [!TIP]
-> Use the `mapClass` option in `@EntityProperty` to enable deep mapping for arrays or nested objects.
-
-## FAQ
-
-**Q: Can I use Reflector with Mongoose or Prisma schemas?**  
-A: Yes! Just pass your schema class as `mapClass` in the decorator options.
-
-**Q: Does Reflector support deep/nested mapping?**  
-A: Yes, child objects and arrays are mapped recursively if you specify `mapClass`.
-
-**Q: Is runtime configuration required?**  
-A: No, everything is handled via TypeScript decorators and metadata.
 
 ---
 
-> For more advanced usage, see the source code and examples in the `src/` directory.
+## API Overview
+
+### Decorators
+- `@Entity(EntityClass)` — Attach mapping logic to a DTO
+- `@EntityProperty('propertyName', { mapClass?: Class })` — Map a DTO property to an entity property
+
+### Methods
+- `mapToEntity()` — Map DTO to entity object
+- `mapFromEntity(entity)` — Populate DTO from entity object
+- `getEntityMappings(target)` — Get mapping metadata
+- `mapToEntity<T, U>(dto, EntityClass, DtoClass)` — Utility for manual mapping
+
+---
+
+## Advanced Usage
+
+- **Nested objects & arrays**: Use `mapClass` to recursively map child DTOs
+- **Type safety**: Use TypeScript type assertions if needed
+- **Custom logic**: Extend DTOs/entities for custom mapping
+
+---
+
+## FAQ & Tips
+
+> [!TIP]
+> Always import `reflect-metadata` at the top of your entry file.
+
+> [!WARNING]
+> Only public properties (with getters) are mapped. Private fields are ignored.
+
+> [!NOTE]
+> The library is framework-agnostic and works with any Node.js/TypeScript project.
+
+---
+
+## Useful Links
+- [TypeScript Decorators](https://www.typescriptlang.org/docs/handbook/decorators.html)
+- [reflect-metadata](https://www.npmjs.com/package/reflect-metadata)
+- [API Reference](./src/index.ts)
+
+---
+
+Enjoy clean, declarative mapping in your TypeScript projects!

@@ -6,8 +6,11 @@
   "target": "ES2022",
   "useDefineForClassFields": false,
   "outDir": "./dist",
-  "types": ["node"],
+  "types": ["node", "jest"],
   "moduleResolution": "nodenext",
-  "module": "NodeNext"
+  "module": "NodeNext",
+  "isolatedModules": true
   }
+  ,
+  "exclude": ["tests", "**/*.spec.ts"]
 }
