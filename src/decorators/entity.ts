@@ -85,8 +85,20 @@ export function Entity(EntityClass: new (...args: any[]) => any): ClassDecorator
             if (typeof dtoInstance.mapFromEntity === 'function') {
               dtoInstance.mapFromEntity(item);
               return dtoInstance;
+            } else {
+              // Manual mapping for DTO property names
+              const itemMappings = getEntityMappings(dtoClass);
+              for (const [subDtoKey, subMeta] of Object.entries(itemMappings)) {
+                let subEntityKey: string;
+                if (subMeta && typeof subMeta === 'object' && subMeta !== null && 'source' in (subMeta as object)) {
+                  subEntityKey = (subMeta as any).source;
+                } else {
+                  subEntityKey = subMeta as string;
+                }
+                dtoInstance[subDtoKey] = item[subEntityKey];
+              }
+              return dtoInstance;
             }
-            return item;
           });
         } else if (value && dtoClass) {
           const dtoInstance = new dtoClass();
@@ -94,7 +106,18 @@ export function Entity(EntityClass: new (...args: any[]) => any): ClassDecorator
             dtoInstance.mapFromEntity(value);
             (this as any)[dtoKey] = dtoInstance;
           } else {
-            (this as any)[dtoKey] = value;
+            // Manual mapping for DTO property names
+            const itemMappings = getEntityMappings(dtoClass);
+            for (const [subDtoKey, subMeta] of Object.entries(itemMappings)) {
+              let subEntityKey: string;
+              if (subMeta && typeof subMeta === 'object' && subMeta !== null && 'source' in (subMeta as object)) {
+                subEntityKey = (subMeta as any).source;
+              } else {
+                subEntityKey = subMeta as string;
+              }
+              dtoInstance[subDtoKey] = value[subEntityKey];
+            }
+            (this as any)[dtoKey] = dtoInstance;
           }
         } else {
           (this as any)[dtoKey] = value;

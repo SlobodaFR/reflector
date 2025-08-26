@@ -1,5 +1,5 @@
 {
-  "name": "@thomassloboda/reflector",
+  "name": "thomassloboda-reflector",
   "version": "1.0.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -9,6 +9,10 @@
       "require": "./dist/index.js",
       "types": "./dist/index.d.ts"
     }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:SlobodaFR/reflector.git"
   },
   "author": {
     "name": "Thomas Sloboda",

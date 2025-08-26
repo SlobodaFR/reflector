@@ -1,5 +1,6 @@
 import { Entity, EntityProperty } from "../../src";
 import { Operation, OperationStep } from "./";
+import { OperationStepContext } from "./operations.operation-step-context";
 
 @Entity(OperationStep)
 export class CreateOperationStepRequestDTO {
@@ -8,6 +9,9 @@ export class CreateOperationStepRequestDTO {
 
     @EntityProperty('stepDescription')
     public description!: string;
+
+    @EntityProperty('stepContext')
+    public context!: OperationStepContext;
 }
 
 @Entity(Operation)

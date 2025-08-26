@@ -1,0 +1,1 @@
+export type OperationStepContext = 'Context-1' | 'Context-2' | 'Context-3';

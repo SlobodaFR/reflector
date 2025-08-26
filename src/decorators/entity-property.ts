@@ -8,7 +8,7 @@ export function EntityProperty(source: string, options?: { mapClass?: any }): Pr
 
     // @ts-ignore
     const existing = Reflect.getMetadata(ENTITY_PROP_KEY, ctor) || {};
-    existing[propertyKey.toString()] = { source, mapClass: options?.mapClass };
+  existing[propertyKey.toString()] = { source, mapClass: options?.mapClass, dtoClass: options?.mapClass };
     // @ts-ignore
     Reflect.defineMetadata(ENTITY_PROP_KEY, existing, ctor);
   };
