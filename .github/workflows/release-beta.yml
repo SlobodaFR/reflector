@@ -1,9 +1,6 @@
 name: Release Beta
 
 on:
-  push:
-    branches-ignore:
-      - main
   pull_request:
     branches-ignore:
       - main
