@@ -60,4 +60,12 @@ jobs:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           PR_NUMBER: ${{ steps.pr.outputs.PR_NUMBER }}
           BUILD_COUNT: ${{ steps.buildcount.outputs.BUILD_COUNT }}
+
+      - name: Release beta
+        if: success()
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          PR_NUMBER: ${{ steps.pr.outputs.PR_NUMBER }}
+          BUILD_COUNT: ${{ steps.buildcount.outputs.BUILD_COUNT }}
         run: npx semantic-release
