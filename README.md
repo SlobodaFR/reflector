@@ -2,6 +2,14 @@
 
 > TypeScript decorators for seamless DTO ↔ Entity mapping
 
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=SlobodaFR_reflector&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=ORG_REPO)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=SlobodaFR_reflector&metric=coverage)](https://sonarcloud.io/summary/new_code?id=ORG_REPO)
+[![npm version](https://img.shields.io/npm/v/thomassloboda-reflector.svg)](https://www.npmjs.com/package/thomassloboda-reflector)
+[![npm downloads](https://img.shields.io/npm/dm/thomassloboda-reflector.svg)](https://www.npmjs.com/package/thomassloboda-reflector)
+[![Stable CI](https://github.com/SlobodaFR/reflector/actions/workflows/release-main.yml/badge.svg)](https://github.com/SlobodaFR/reflector/actions/workflows/ci.yml)
+[![Beta CI](https://github.com/SlobodaFR/reflector/actions/workflows/release-beta.yml/badge.svg)](https://github.com/SlobodaFR/reflector/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
+
 Reflector is a lightweight TypeScript library that lets you map between DTOs and Entities using decorators and runtime metadata. It’s designed for clean, maintainable code in Node.js and TypeScript projects.
 
 ---
