@@ -1,9 +1,12 @@
 {
   "branches": [
     "main",
-    { "name": "*", "prerelease": true }
+    {
+      "name": "*",
+      "prerelease": true,
+      "tagFormat": "${version}-beta${process.env.PR_NUMBER}.${process.env.BUILD_COUNT}"
+    }
   ],
-  "tagFormat": "${version}-beta${process.env.PR_NUMBER}.${process.env.BUILD_COUNT}",
   "plugins": [
     "@semantic-release/commit-analyzer",
     "@semantic-release/release-notes-generator",

@@ -1,6 +1,5 @@
 name: Release Beta
 
-
 on:
   push:
     branches-ignore:
