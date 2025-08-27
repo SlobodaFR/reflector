@@ -16,7 +16,7 @@ jobs:
           node-version: '22'
       - name: Install dependencies
         run: npm ci
-      - name: Run tests
+      - name: Run tests with coverage
         run: npm test -- --coverage
       - name: Get PR number
         id: pr
@@ -26,42 +26,13 @@ jobs:
         run: |
           COUNT=$(git tag --list "*-beta${{ steps.pr.outputs.PR_NUMBER }}.*" | wc -l)
           echo "BUILD_COUNT=$((COUNT+1))" >> $GITHUB_ENV
-      - name: Release beta
-        if: success()
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-          PR_NUMBER: ${{ steps.pr.outputs.PR_NUMBER }}
-          BUILD_COUNT: ${{ steps.buildcount.outputs.BUILD_COUNT }}
-        run: npx semantic-release
-
-  sonarqube-scan:
-    name: SonarQube Quality Scan
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - name: Use Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-      - name: Install dependencies
-        run: npm ci
-      - name: Run tests with coverage
-        run: npm test -- --coverage
       - name: SonarQube Scan
-        uses: kitabisa/sonarqube-action@v1.2.0
-        with:
-          host: ${{ secrets.SONARQUBE_HOST }}
-          login: ${{ secrets.SONARQUBE_TOKEN }}
+        uses: SonarSource/sonarqube-scan-action@<action version> # Ex: v4.1.0, See the latest version at https://github.com/marketplace/actions/official-sonarqube-scan
         env:
+          SONAR_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
+          SONAR_HOST_URL: ${{ vars.SONARQUBE_HOST }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-          PR_NUMBER: ${{ steps.pr.outputs.PR_NUMBER }}
-          BUILD_COUNT: ${{ steps.buildcount.outputs.BUILD_COUNT }}
-
       - name: Release beta
         if: success()
         env:
