@@ -1,13 +1,14 @@
 {
   "name": "thomassloboda-reflector",
   "version": "1.0.0",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "types": "dist/cjs/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/index.js",
-      "require": "./dist/index.js",
-      "types": "./dist/index.d.ts"
+      "require": "./dist/cjs/index.js",
+      "import": "./dist/esm/index.js",
+      "types": "./dist/cjs/index.d.ts"
     }
   },
   "repository": {
@@ -21,7 +22,7 @@
   },
   "scripts": {
     "start": "npx tsx src/index.ts",
-    "build": "rm -rf dist && tsc --declaration --emitDeclarationOnly false",
+  "build": "rm -rf dist && tsc --project tsconfig.cjs.json && tsc --project tsconfig.esm.json",
     "test": "jest",
     "prepare": "husky install"
   },
@@ -34,7 +35,6 @@
     "package.json"
   ],
   "description": "",
-  "type": "module",
   "dependencies": {
     "reflect-metadata": "^0.2.2"
   },
