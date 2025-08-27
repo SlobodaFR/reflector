@@ -7,10 +7,10 @@
   "useDefineForClassFields": false,
   "outDir": "./dist",
   "types": ["node", "jest"],
-  "moduleResolution": "nodenext",
-  "module": "NodeNext",
+  "moduleResolution": "node",
+  "module": "CommonJS",
   "isolatedModules": true
   }
   ,
-  "exclude": ["tests", "**/*.spec.ts"]
+  "exclude": []
 }

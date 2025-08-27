@@ -1,5 +1,9 @@
-import "reflect-metadata";
-import { CreateOperationRequestDTO, CreateOperationStepRequestDTO, CreatedOperationDTO } from "./test-types";
+import 'reflect-metadata';
+import {
+  CreateOperationRequestDTO,
+  CreateOperationStepRequestDTO,
+  CreatedOperationDTO,
+} from './test-types';
 
 describe('Entity Decorators Mapping', () => {
   it('should map DTO to entity and back', () => {
@@ -7,7 +11,7 @@ describe('Entity Decorators Mapping', () => {
     createOperationDTO.id = 'operation-1';
     createOperationDTO.version = 1;
 
-const createOperationStepDTO = new CreateOperationStepRequestDTO();
+    const createOperationStepDTO = new CreateOperationStepRequestDTO();
     createOperationStepDTO.id = 'step-1';
     createOperationStepDTO.description = 'Step 1';
     createOperationStepDTO.context = 'Context-1';

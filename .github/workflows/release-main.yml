@@ -1,0 +1,52 @@
+name: Release Stable
+
+on:
+  push:
+    branches:
+      - main
+
+concurrency:
+  group: ${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test-and-release:
+    name: Stable Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install dependencies
+        run: npm i
+      - name: Lint code
+        run: npm run lint
+      - name: Run tests with coverage
+        run: npm test -- --coverage
+      - name: SonarQube Scan
+        uses: SonarSource/sonarqube-scan-action@v5.3.0
+        env:
+          SONAR_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONARQUBE_HOST }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Release stable & publish
+        if: success()
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npx semantic-release
+
+      - name: Notify Slack
+        if: success()
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+        run: |
+          VERSION=$(jq -r .version < package.json)
+          PACKAGE="reflector"
+          NPM_URL="https://www.npmjs.com/package/thomassloboda-reflector"
+          MESSAGE=":rocket: Nouvelle version stable publiée: $PACKAGE@$VERSION ($GITHUB_SHA)\nLien NPM: $NPM_URL"
+          curl -X POST -H 'Content-type: application/json' --data '{"text":"'$MESSAGE'"}' "$SLACK_WEBHOOK"

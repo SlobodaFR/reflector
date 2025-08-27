@@ -1,0 +1,45 @@
+name: Release Beta
+
+on:
+  pull_request:
+
+jobs:
+  test-and-release:
+    name: Beta Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install dependencies
+        run: npm i
+      - name: Lint code
+        run: npm run lint
+      - name: Run tests with coverage
+        run: npm test -- --coverage
+      - name: Get PR number
+        id: pr
+        run: echo "PR_NUMBER=${{ github.event.pull_request.number }}" >> $GITHUB_OUTPUT
+      - name: Get build count
+        id: buildcount
+        run: |
+          COUNT=$(git tag --list "*-beta${{ steps.pr.outputs.PR_NUMBER }}.*" | wc -l)
+          echo "BUILD_COUNT=$((COUNT+1))" >> $GITHUB_ENV
+      - name: SonarQube Scan
+        uses: SonarSource/sonarqube-scan-action@v5.3.0
+        env:
+          SONAR_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONARQUBE_HOST }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Release beta
+        if: success()
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          PR_NUMBER: ${{ steps.pr.outputs.PR_NUMBER }}
+          BUILD_COUNT: ${{ steps.buildcount.outputs.BUILD_COUNT }}
+        run: npx semantic-release
