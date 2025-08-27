@@ -3,6 +3,11 @@ name: Release Beta
 on:
   pull_request:
 
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+
 jobs:
   test-and-release:
     name: Beta Release
