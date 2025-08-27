@@ -21,11 +21,11 @@
     "url": "https://thomas.sloboda.fr"
   },
   "scripts": {
-  "start": "npx tsx src/index.ts",
-  "build": "rm -rf dist && tsc --project tsconfig.cjs.json && tsc --project tsconfig.esm.json",
-  "test": "jest",
-  "lint": "eslint . --ext .ts,.tsx,.js",
-  "prepare": "husky install"
+    "start": "npx tsx src/index.ts",
+    "build": "rm -rf dist && tsc --project tsconfig.cjs.json && tsc --project tsconfig.esm.json",
+    "test": "jest",
+    "lint": "eslint . --ext .ts,.tsx,.js",
+    "prepare": "husky install"
   },
   "keywords": [],
   "license": "ISC",
