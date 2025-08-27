@@ -39,3 +39,14 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: npx semantic-release
+
+      - name: Notify Slack
+        if: success()
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+        run: |
+          VERSION=$(jq -r .version < package.json)
+          PACKAGE="reflector"
+          NPM_URL="https://www.npmjs.com/package/thomassloboda-reflector"
+          MESSAGE=":rocket: Nouvelle version stable publiée: $PACKAGE@$VERSION ($GITHUB_SHA)\nLien NPM: $NPM_URL"
+          curl -X POST -H 'Content-type: application/json' --data '{"text":"'$MESSAGE'"}' "$SLACK_WEBHOOK"
