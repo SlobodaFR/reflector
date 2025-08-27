@@ -5,6 +5,7 @@ on:
 
 jobs:
   test-and-release:
+    name: Beta Release
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -35,7 +36,7 @@ jobs:
         run: npx semantic-release
 
   sonarqube-scan:
-    name: SonarQube Scan
+    name: SonarQube Quality Scan
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
