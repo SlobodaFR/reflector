@@ -18,7 +18,7 @@ export default [
     },
     plugins: {
       '@typescript-eslint': tseslint,
-      prettier,
+      'eslint-plugin-prettier': prettier,
     },
     rules: {
       'prettier/prettier': 'error',
