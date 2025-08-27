@@ -1,4 +1,4 @@
-import { ENTITY_PROP_KEY } from "./constants";
+import { ENTITY_PROP_KEY } from './constants';
 
 export function getEntityMappings(target: Function): Record<string, string> {
   // @ts-ignore

@@ -1,10 +1,11 @@
-import { ENTITY_CLASS_KEY } from "./constants";
-import { getEntityMappings } from "./get-mappings";
+import { ENTITY_CLASS_KEY } from './constants';
+import { getEntityMappings } from './get-mappings';
 
+// eslint-disable-next-line no-unused-vars
 export function Entity(EntityClass: new (...args: any[]) => any): ClassDecorator {
   return function (target: Function) {
-  // @ts-ignore
-  Reflect.defineMetadata(ENTITY_CLASS_KEY, EntityClass, target);
+    // @ts-ignore
+    Reflect.defineMetadata(ENTITY_CLASS_KEY, EntityClass, target);
     (target as any).prototype.mapToEntity = function () {
       const mappings = getEntityMappings(target);
       const entityObj: any = {};
@@ -30,11 +31,11 @@ export function Entity(EntityClass: new (...args: any[]) => any): ClassDecorator
                 const publicObj: any = {};
                 const proto = Object.getPrototypeOf(item);
                 Object.getOwnPropertyNames(proto)
-                  .filter(prop => {
+                  .filter((prop) => {
                     const desc = Object.getOwnPropertyDescriptor(proto, prop);
                     return desc && typeof desc.get === 'function';
                   })
-                  .forEach(getter => {
+                  .forEach((getter) => {
                     publicObj[getter] = item[getter];
                   });
                 return publicObj;
@@ -50,11 +51,11 @@ export function Entity(EntityClass: new (...args: any[]) => any): ClassDecorator
           const publicObj: any = {};
           const proto = Object.getPrototypeOf(value);
           Object.getOwnPropertyNames(proto)
-            .filter(prop => {
+            .filter((prop) => {
               const desc = Object.getOwnPropertyDescriptor(proto, prop);
               return desc && typeof desc.get === 'function';
             })
-            .forEach(getter => {
+            .forEach((getter) => {
               publicObj[getter] = value[getter];
             });
           entityObj[entityKey] = publicObj;
@@ -90,7 +91,12 @@ export function Entity(EntityClass: new (...args: any[]) => any): ClassDecorator
               const itemMappings = getEntityMappings(dtoClass);
               for (const [subDtoKey, subMeta] of Object.entries(itemMappings)) {
                 let subEntityKey: string;
-                if (subMeta && typeof subMeta === 'object' && subMeta !== null && 'source' in (subMeta as object)) {
+                if (
+                  subMeta &&
+                  typeof subMeta === 'object' &&
+                  subMeta !== null &&
+                  'source' in (subMeta as object)
+                ) {
                   subEntityKey = (subMeta as any).source;
                 } else {
                   subEntityKey = subMeta as string;
@@ -110,7 +116,12 @@ export function Entity(EntityClass: new (...args: any[]) => any): ClassDecorator
             const itemMappings = getEntityMappings(dtoClass);
             for (const [subDtoKey, subMeta] of Object.entries(itemMappings)) {
               let subEntityKey: string;
-              if (subMeta && typeof subMeta === 'object' && subMeta !== null && 'source' in (subMeta as object)) {
+              if (
+                subMeta &&
+                typeof subMeta === 'object' &&
+                subMeta !== null &&
+                'source' in (subMeta as object)
+              ) {
                 subEntityKey = (subMeta as any).source;
               } else {
                 subEntityKey = subMeta as string;

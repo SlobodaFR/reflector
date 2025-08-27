@@ -1,4 +1,1 @@
-export {
-	Entity,
-	EntityProperty,
-} from './decorators';
+export { Entity, EntityProperty } from './decorators';
