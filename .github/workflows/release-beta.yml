@@ -5,10 +5,6 @@ on:
     branches-ignore:
       - main
 
-concurrency:
-  group: ${{ github.ref }}
-  cancel-in-progress: true
-
 jobs:
   test-and-release:
     runs-on: ubuntu-latest
@@ -22,19 +18,45 @@ jobs:
       - name: Install dependencies
         run: npm ci
       - name: Run tests
-        run: npm test
+        run: npm test -- --coverage
       - name: Get PR number
         id: pr
         run: echo "PR_NUMBER=${{ github.event.pull_request.number }}" >> $GITHUB_OUTPUT
-
       - name: Get build count
         id: buildcount
         run: |
           COUNT=$(git tag --list "*-beta${{ steps.pr.outputs.PR_NUMBER }}.*" | wc -l)
           echo "BUILD_COUNT=$((COUNT+1))" >> $GITHUB_ENV
-
       - name: Release beta
         if: success()
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          PR_NUMBER: ${{ steps.pr.outputs.PR_NUMBER }}
+          BUILD_COUNT: ${{ steps.buildcount.outputs.BUILD_COUNT }}
+        run: npx semantic-release
+
+  sonarqube-scan:
+    name: SonarQube Scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install dependencies
+        run: npm ci
+      - name: Run tests with coverage
+        run: npm test -- --coverage
+      - name: SonarQube Scan
+        uses: kitabisa/sonarqube-action@v1.2.0
+        with:
+          host: ${{ secrets.SONARQUBE_HOST }}
+          login: ${{ secrets.SONARQUBE_TOKEN }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
