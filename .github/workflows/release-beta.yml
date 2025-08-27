@@ -27,7 +27,7 @@ jobs:
           COUNT=$(git tag --list "*-beta${{ steps.pr.outputs.PR_NUMBER }}.*" | wc -l)
           echo "BUILD_COUNT=$((COUNT+1))" >> $GITHUB_ENV
       - name: SonarQube Scan
-        uses: SonarSource/sonarqube-scan-action@<action version> # Ex: v4.1.0, See the latest version at https://github.com/marketplace/actions/official-sonarqube-scan
+        uses: SonarSource/sonarqube-scan-action@5.3.0
         env:
           SONAR_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
           SONAR_HOST_URL: ${{ vars.SONARQUBE_HOST }}
