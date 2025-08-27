@@ -12,6 +12,9 @@ concurrency:
 jobs:
   test-and-release:
     runs-on: ubuntu-latest
+    env:
+      PR_NUMBER: ${{ steps.pr.outputs.PR_NUMBER }}
+      BUILD_COUNT: ${{ steps.buildcount.outputs.BUILD_COUNT }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -25,13 +28,12 @@ jobs:
         run: npm test
       - name: Get PR number
         id: pr
-        run: echo "PR_NUMBER=${{ github.event.pull_request.number }}" >> $GITHUB_ENV
-        shell: bash
+        run: echo "PR_NUMBER=${{ github.event.pull_request.number }}" >> $GITHUB_OUTPUT
 
       - name: Get build count
         id: buildcount
         run: |
-          COUNT=$(git tag --list "*-beta${{ env.PR_NUMBER }}.*" | wc -l)
+          COUNT=$(git tag --list "*-beta${{ steps.pr.outputs.PR_NUMBER }}.*" | wc -l)
           echo "BUILD_COUNT=$((COUNT+1))" >> $GITHUB_ENV
 
       - name: Release beta
@@ -39,6 +41,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-          PR_NUMBER: ${{ env.PR_NUMBER }}
-          BUILD_COUNT: ${{ env.BUILD_COUNT }}
+          PR_NUMBER: ${{ steps.pr.outputs.PR_NUMBER }}
+          BUILD_COUNT: ${{ steps.buildcount.outputs.BUILD_COUNT }}
         run: npx semantic-release
