@@ -1,7 +1,11 @@
 name: Release Beta
 
+
 on:
   push:
+    branches-ignore:
+      - main
+  pull_request:
     branches-ignore:
       - main
 
@@ -23,9 +27,21 @@ jobs:
         run: npm ci
       - name: Run tests
         run: npm test
+      - name: Get PR number
+        id: pr
+        run: echo "PR_NUMBER=${{ github.event.pull_request.number || github.ref_name }}" >> $GITHUB_ENV
+
+      - name: Get build count
+        id: buildcount
+        run: |
+          COUNT=$(git tag --list "*-beta${{ github.event.pull_request.number || github.ref_name }}.*" | wc -l)
+          echo "BUILD_COUNT=$((COUNT+1))" >> $GITHUB_ENV
+
       - name: Release beta
         if: success()
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          PR_NUMBER: ${{ env.PR_NUMBER }}
+          BUILD_COUNT: ${{ env.BUILD_COUNT }}
         run: npx semantic-release
