@@ -12,9 +12,6 @@ concurrency:
 jobs:
   test-and-release:
     runs-on: ubuntu-latest
-    env:
-      PR_NUMBER: ${{ steps.pr.outputs.PR_NUMBER }}
-      BUILD_COUNT: ${{ steps.buildcount.outputs.BUILD_COUNT }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
