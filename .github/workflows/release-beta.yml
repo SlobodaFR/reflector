@@ -28,22 +28,13 @@ jobs:
         run: npm test
       - name: Get PR number
         id: pr
-        run: |
-          if [ "${{ github.event_name }}" = "pull_request" ]; then
-            echo "PR_NUMBER=${{ github.event.pull_request.number }}" >> $GITHUB_ENV
-          else
-            BRANCH_NAME="${GITHUB_REF##*/}"
-            PR_NUMBER=$(gh pr list --state open --json headRefName,number | jq -r ".[] | select(.headRefName==\"$BRANCH_NAME\") | .number")
-            echo "PR_NUMBER=$PR_NUMBER" >> $GITHUB_ENV
-          fi
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: echo "PR_NUMBER=${{ github.event.pull_request.number }}" >> $GITHUB_ENV
         shell: bash
 
       - name: Get build count
         id: buildcount
         run: |
-          COUNT=$(git tag --list "*-beta${{ github.event.pull_request.number || github.ref_name }}.*" | wc -l)
+          COUNT=$(git tag --list "*-beta${{ env.PR_NUMBER }}.*" | wc -l)
           echo "BUILD_COUNT=$((COUNT+1))" >> $GITHUB_ENV
 
       - name: Release beta
