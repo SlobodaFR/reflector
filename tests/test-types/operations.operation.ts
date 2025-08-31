@@ -5,7 +5,7 @@ export class Operation {
   private _version!: Version;
   private _steps: OperationStep[] = [];
 
-  constructor({
+  private constructor({
     operationIdentifier,
     version,
     steps,

@@ -7,4 +7,5 @@ module.exports = {
     '^.+\\.tsx?$': ['ts-jest', { useESM: true }],
   },
   testMatch: ['**/*.spec.ts'],
+  coveragePathIgnorePatterns: ['<rootDir>/tests/'],
 };
