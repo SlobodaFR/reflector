@@ -18,7 +18,7 @@ export class OperationStep {
   private _stepDescription!: string;
   private _stepContext?: OperationStepContext;
 
-  constructor({ stepIdentifier, stepDescription, stepContext }: OperationStepProps) {
+  private constructor({ stepIdentifier, stepDescription, stepContext }: OperationStepProps) {
     this._stepIdentifier = stepIdentifier;
     this._stepDescription = stepDescription;
     this._stepContext = stepContext;

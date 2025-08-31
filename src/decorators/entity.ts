@@ -1,8 +1,7 @@
 import { ENTITY_CLASS_KEY } from './constants';
 import { getEntityMappings } from './get-mappings';
 
-// eslint-disable-next-line no-unused-vars
-export function Entity(EntityClass: new (...args: any[]) => any): ClassDecorator {
+export function Entity(EntityClass: Function): ClassDecorator {
   return function (target: Function) {
     // @ts-ignore
     Reflect.defineMetadata(ENTITY_CLASS_KEY, EntityClass, target);
@@ -82,7 +81,19 @@ export function Entity(EntityClass: new (...args: any[]) => any): ClassDecorator
         const value = entity[entityKey];
         if (Array.isArray(value) && value.length > 0 && dtoClass) {
           (this as any)[dtoKey] = value.map((item: any) => {
-            const dtoInstance = new dtoClass();
+            let dtoInstance;
+            if (typeof dtoClass.create === 'function') {
+              // Utilise la méthode statique 'create' si disponible
+              dtoInstance = dtoClass.create(item);
+            } else {
+              try {
+                dtoInstance = new dtoClass();
+              } catch {
+                throw new Error(
+                  `Impossible d'instancier ${dtoClass.name}: pas de constructeur public ni de méthode 'create'.`,
+                );
+              }
+            }
             if (typeof dtoInstance.mapFromEntity === 'function') {
               dtoInstance.mapFromEntity(item);
               return dtoInstance;
@@ -107,7 +118,18 @@ export function Entity(EntityClass: new (...args: any[]) => any): ClassDecorator
             }
           });
         } else if (value && dtoClass) {
-          const dtoInstance = new dtoClass();
+          let dtoInstance;
+          if (typeof dtoClass.create === 'function') {
+            dtoInstance = dtoClass.create(value);
+          } else {
+            try {
+              dtoInstance = new dtoClass();
+            } catch {
+              throw new Error(
+                `Impossible d'instancier ${dtoClass.name}: pas de constructeur public ni de méthode 'create'.`,
+              );
+            }
+          }
           if (typeof dtoInstance.mapFromEntity === 'function') {
             dtoInstance.mapFromEntity(value);
             (this as any)[dtoKey] = dtoInstance;
