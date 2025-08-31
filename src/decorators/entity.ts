@@ -90,7 +90,7 @@ export function Entity(EntityClass: Function): ClassDecorator {
                 dtoInstance = new dtoClass();
               } catch {
                 throw new Error(
-                  `Impossible d'instancier ${dtoClass.name}: pas de constructeur public ni de méthode 'create'.`,
+                  `Cannot instantiate ${dtoClass.name}: no public constructor or 'create' method.`,
                 );
               }
             }
@@ -126,7 +126,7 @@ export function Entity(EntityClass: Function): ClassDecorator {
               dtoInstance = new dtoClass();
             } catch {
               throw new Error(
-                `Impossible d'instancier ${dtoClass.name}: pas de constructeur public ni de méthode 'create'.`,
+                `Cannot instantiate ${dtoClass.name}: no public constructor or 'create' method.`,
               );
             }
           }
