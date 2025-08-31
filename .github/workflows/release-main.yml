@@ -54,4 +54,5 @@ jobs:
           PACKAGE="reflector"
           NPM_URL="https://www.npmjs.com/package/thomassloboda-reflector"
           MESSAGE=":rocket: Nouvelle version stable publiée: $PACKAGE@$VERSION ($GITHUB_SHA)\nLien NPM: $NPM_URL"
-          curl -X POST -H 'Content-type: application/json' --data '{"text":"'$MESSAGE'"}' "$SLACK_WEBHOOK"
+          JSON=$(jq -n --arg text "$MESSAGE" '{text: $text}')
+          curl -X POST -H 'Content-type: application/json' --data "$JSON" "$SLACK_WEBHOOK"
