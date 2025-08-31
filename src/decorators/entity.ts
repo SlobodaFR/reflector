@@ -83,16 +83,18 @@ export function Entity(EntityClass: Function): ClassDecorator {
           (this as any)[dtoKey] = value.map((item: any) => {
             let dtoInstance;
             if (typeof dtoClass.create === 'function') {
-              // Use the static 'create' method if available
               dtoInstance = dtoClass.create(item);
             } else {
               try {
                 dtoInstance = new dtoClass();
               } catch {
-                throw new Error(
-                  `Cannot instantiate ${dtoClass.name}: no public constructor or 'create' method.`,
-                );
+                dtoInstance = undefined;
               }
+            }
+            if (!dtoInstance) {
+              throw new Error(
+                `Cannot instantiate ${dtoClass.name}: no public constructor or 'create' method.`,
+              );
             }
             if (typeof dtoInstance.mapFromEntity === 'function') {
               dtoInstance.mapFromEntity(item);
@@ -125,10 +127,13 @@ export function Entity(EntityClass: Function): ClassDecorator {
             try {
               dtoInstance = new dtoClass();
             } catch {
-              throw new Error(
-                `Cannot instantiate ${dtoClass.name}: no public constructor or 'create' method.`,
-              );
+              dtoInstance = undefined;
             }
+          }
+          if (!dtoInstance) {
+            throw new Error(
+              `Cannot instantiate ${dtoClass.name}: no public constructor or 'create' method.`,
+            );
           }
           if (typeof dtoInstance.mapFromEntity === 'function') {
             dtoInstance.mapFromEntity(value);
