@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/SlobodaFR/reflector/compare/v1.0.0...v1.1.0) (2025-08-31)
+
+
+### Features
+
+* improve JSON formatting in release-main workflow ([c8cbe4c](https://github.com/SlobodaFR/reflector/commit/c8cbe4c4d6f22b83c0886581dd43555411f0b442))
+
 # 1.0.0 (2025-08-27)
 
 
