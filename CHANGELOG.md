@@ -1,3 +1,10 @@
+## [1.1.1](https://github.com/SlobodaFR/reflector/compare/v1.1.0...v1.1.1) (2025-08-31)
+
+
+### Bug Fixes
+
+* **reflector:** support entity mapping for classes with private constructors ([#7](https://github.com/SlobodaFR/reflector/issues/7)) ([e7fbd07](https://github.com/SlobodaFR/reflector/commit/e7fbd078d2d8a7804cb4013a671898da8e30b85b))
+
 # [1.1.0](https://github.com/SlobodaFR/reflector/compare/v1.0.0...v1.1.0) (2025-08-31)
 
 
