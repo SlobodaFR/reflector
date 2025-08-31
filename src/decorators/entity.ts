@@ -83,7 +83,7 @@ export function Entity(EntityClass: Function): ClassDecorator {
           (this as any)[dtoKey] = value.map((item: any) => {
             let dtoInstance;
             if (typeof dtoClass.create === 'function') {
-              // Utilise la méthode statique 'create' si disponible
+              // Use the static 'create' method if available
               dtoInstance = dtoClass.create(item);
             } else {
               try {
